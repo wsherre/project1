@@ -24,7 +24,7 @@ void lib_init(){
 }
 
 void lib_destroy(){
-    FILE* temp = fopen("temp.txt", "w+");
+    FILE* file = fopen("temp.txt", "w+");
     int total = 0, total_bytes = 0, current_bytes = 0;
     list* temp = head;
     list* kill = NULL;
@@ -35,9 +35,9 @@ void lib_destroy(){
         kill = temp;
         temp = temp->next;
         real_free(kill);
-	fprintf(temp,"LEAK\t%d\n", current_bytes);
+	fprintf(file,"LEAK\t%d\n", current_bytes);
     }
-    fprintf(temp, "TOTAL\t%d\t%d\n", total, total_bytes);
+    fprintf(file, "TOTAL\t%d\t%d\n", total, total_bytes);
 }
 
 void free(void* ptr){
