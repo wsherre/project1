@@ -13,9 +13,10 @@ int main(int argc, char **argv){
         argv[i] = argv[i+1];
     }
     argv[argc] = NULL;
-    if(strcmp(".", &argv[0][0]) == 0){
+   char c =  *argv[0];
+    if('.' != c){
         printf("sup\n");
     }else{
-    execvpe(argv[0], argv, envp);}
+   	 execvpe(argv[0], argv, envp);}
 
 }
