@@ -19,7 +19,7 @@ typedef struct list{
 
 list *head = NULL;
 int check_for_leak = 0;
-int print_leaks = 0;
+int list_size;
 
 void lib_init(){
     check_for_leak = 1;
@@ -27,7 +27,7 @@ void lib_init(){
 
 void lib_destroy(){
     check_for_leak = 0;
-    if(print_leaks != 0){
+    if(list_size == 0){
         int total = 0, total_bytes = 0, current_bytes = 0;
         list* temp = head;
         list* kill = NULL;
@@ -49,6 +49,7 @@ void free(void* ptr){
     if(real_free == NULL){
         real_free = dlsym(RTLD_NEXT, "free");
     }
+    list_size--;
     remove_node(ptr);
     real_free(ptr);
 }
@@ -57,8 +58,8 @@ void *malloc(size_t size)
 {
     if(real_malloc == NULL){
         real_malloc = dlsym(RTLD_NEXT, "malloc");
-        print_leaks = 1;
     }
+    list_size++;
     void *p = NULL;
     p = real_malloc(size);
     if(check_for_leak == 1)
