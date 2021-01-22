@@ -24,6 +24,7 @@ void lib_init(){
 }
 
 void lib_destroy(){
+    check = 0;
     FILE* file = fopen("temp.txt", "w+");
     int total = 0, total_bytes = 0, current_bytes = 0;
     list* temp = head;
@@ -38,6 +39,7 @@ void lib_destroy(){
 	fprintf(file,"LEAK\t%d\n", current_bytes);
     }
     fprintf(file, "TOTAL\t%d\t%d\n", total, total_bytes);
+//    fclose(file);
 }
 
 void free(void* ptr){
