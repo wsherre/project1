@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <string.h>
 
 
 int main(int argc, char **argv){
@@ -12,6 +13,9 @@ int main(int argc, char **argv){
         argv[i] = argv[i+1];
     }
     argv[argc] = NULL;
-    execvpe(argv[0], argv, envp);
+    if(strcmp(".", &argv[0][0]) == 0){
+        printf("sup\n");
+    }else{
+    execvpe(argv[0], argv, envp);}
 
 }
