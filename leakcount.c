@@ -7,12 +7,11 @@
 
 int main(int argc, char **argv){
 
-    char *program = argv[1];
-    char *envp[] = {"LD_PRELOAD=./memoryshim.so"};
+    char *envp[] = {"LD_PRELOAD=./memory_shim.so", NULL};
     for(int i = 0; i < argc; ++i){
         argv[i] = argv[i+1];
     }
     argv[argc] = NULL;
-    execvpe(program, argv, envp);
+    execvpe(argv[0], argv, envp);
 
 }

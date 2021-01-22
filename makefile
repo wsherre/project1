@@ -25,7 +25,3 @@ memory_shim.so: memory_shim.c
 
 clean:
 	rm $(BINS)
-	#because I have something weird with xcode set up on my mac it creates this
-	#directory for each exec. Writing this in case i forget to delete before submitting
-	rm -r *.dSYM
-
