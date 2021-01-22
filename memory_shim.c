@@ -16,6 +16,7 @@ typedef struct list{
     void* address;
     struct list *next;
 }list;
+
 list *head = NULL;
 int check_for_leak = 0;
 int print_leaks = 0;
