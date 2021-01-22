@@ -13,10 +13,16 @@ int main(int argc, char **argv){
         argv[i] = argv[i+1];
     }
     argv[argc] = NULL;
-   char c =  *argv[0];
-    if('.' != c){
-        printf("sup\n");
+    char c =  *argv[0];
+    pid_t pid;
+    if((pid = fork()) == 0){
+        if('.' != c){
+            execvp(argv[0], argv);
+        }else{
+            execvpe(argv[0], argv, envp);
+        }
     }else{
-   	 execvpe(argv[0], argv, envp);}
-
+        waitpid(pid, NULL, 0);
+    }
+    return 0;
 }
