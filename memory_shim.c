@@ -27,7 +27,7 @@ void lib_init(){
 
 void lib_destroy(){
     check_for_leak = 0;
-    if(list_size == 0){
+    FILE* temp_file = fopen("address.txt", "w+");
         int total = 0, total_bytes = 0, current_bytes = 0;
         list* temp = head;
         list* kill = NULL;
@@ -38,10 +38,10 @@ void lib_destroy(){
             kill = temp;
             temp = temp->next;
             real_free(kill);
-        fprintf(stderr,"LEAK\t%d\n", current_bytes);
+        fprintf(temp_file,"LEAK\t%d\n", current_bytes);
         }
-        fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);
-    }
+        fprintf(temp_file, "TOTAL\t%d\t%d\n", total, total_bytes);
+    
 }
 
 void free(void* ptr){
