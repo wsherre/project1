@@ -17,29 +17,30 @@ typedef struct list{
     struct list *next;
 }list;
 list *head = NULL;
-int check = 0;
+int check_for_leak = 0;
+int print_leaks = 0;
 
 void lib_init(){
-    check = 1;
+    check_for_leak = 1;
 }
 
 void lib_destroy(){
-    check = 0;
-    FILE* file = fopen("temp.txt", "w+");
-    int total = 0, total_bytes = 0, current_bytes = 0;
-    list* temp = head;
-    list* kill = NULL;
-    while(temp != NULL){
-        total++;
-        total_bytes += temp->data;
-	current_bytes = temp->data;
-        kill = temp;
-        temp = temp->next;
-        real_free(kill);
-	fprintf(file,"LEAK\t%d\n", current_bytes);
+    check_for_leak = 0;
+    if(print_leaks != 0){
+        int total = 0, total_bytes = 0, current_bytes = 0;
+        list* temp = head;
+        list* kill = NULL;
+        while(temp != NULL){
+            total++;
+            total_bytes += temp->data;
+        current_bytes = temp->data;
+            kill = temp;
+            temp = temp->next;
+            real_free(kill);
+        fprintf(stderr,"LEAK\t%d\n", current_bytes);
+        }
+        fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);
     }
-    fprintf(file, "TOTAL\t%d\t%d\n", total, total_bytes);
-//    fclose(file);
 }
 
 void free(void* ptr){
@@ -55,10 +56,11 @@ void *malloc(size_t size)
 {
     if(real_malloc == NULL){
         real_malloc = dlsym(RTLD_NEXT, "malloc");
+        print_leaks = 1;
     }
     void *p = NULL;
     p = real_malloc(size);
-    if(check == 1)
+    if(check_for_leak == 1)
         add_node(size, p);
     return p;
 }
