@@ -18,13 +18,15 @@ typedef struct list{
     void* address;
     //struct list *next;
 }list;
-
-list array[1000000];
+#define max_size 1000000
+list array[max_size];
 int array_size = 0;
-list *head = NULL;
 
 void lib_init(){
-    
+    for(int i = 0; i < max_size; ++i){
+        array[i].data = 0;
+        array[i].address = NULL;
+    }
 }
 
 void lib_destroy(){
@@ -44,11 +46,11 @@ void lib_destroy(){
         }
         fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);*/
         for(int i = 0; i < array_size; ++i){
-            if((void*)array[i].address != NULL){
-                printf("LEAK    %zu\n", array[i].data);
+            if(array[i].address != NULL){
+                fprintf(stderr, "LEAK    %zu\n", array[i].data);
             }
         }
-        printf("TOTAL   %d  %d\n", total, total_bytes);
+        fprintf(stderr, "TOTAL   %d  %d\n", total, total_bytes);
 }
 
 //remove the node from the linked list and free the data from real memory
@@ -58,13 +60,13 @@ void free(void* ptr){
         real_free = dlsym(RTLD_NEXT, "free");
     }
     //remove_node(ptr);
-    /*for(int i = 0; i < array_size; ++i){
+    for(int i = 0; i < array_size; ++i){
         if(array[i].address == ptr){
             array[i].data = 0;
             array[i].address = NULL;
             break;
         }
-    }*/
+    }
     real_free(ptr);
 }
 
@@ -81,7 +83,7 @@ void *malloc(size_t size)
     temp.address = p;
     array[array_size] = temp;
     array_size++;
-    printf("malloc %zu %p\n", size, (void*)temp.address);
+    //fprintf(stderr, "malloc %zu  %p\n", temp.data, temp.address);
 
     //add_node(size, p);
     return p;
