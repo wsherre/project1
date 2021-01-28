@@ -44,7 +44,7 @@ void lib_destroy(){
         }
         fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);*/
         for(int i = 0; i < array_size; ++i){
-            if(array[i].address != NULL){
+            if((void*)array[i].address != NULL){
                 printf("LEAK    %zu\n", array[i].data);
             }
         }
@@ -81,7 +81,7 @@ void *malloc(size_t size)
     temp.address = p;
     array[array_size] = temp;
     array_size++;
-    printf("malloc %zu %p\n", size, temp.address);
+    printf("malloc %zu %p\n", size, (void*)temp.address);
 
     //add_node(size, p);
     return p;
