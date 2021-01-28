@@ -14,22 +14,22 @@ void (*real_free)(void*)=NULL;
 //each malloc call will be held as a struct with a memory address and byte number
 //it'll be stored in a link list
 typedef struct list{
-    int data;
+    size_t data;
     void* address;
-    struct list *next;
+    //struct list *next;
 }list;
 
+list array[1000000];
+int array_size = 0;
 list *head = NULL;
-int check_for_leak = 0;
 
 void lib_init(){
-    //ensures the list will only run after the library call
-    check_for_leak = 1;
+    
 }
 
 void lib_destroy(){
-    check_for_leak = 0;
-        int total = 0, total_bytes = 0, current_bytes = 0;
+        int total = 0, total_bytes = 0;
+        /*int total = 0, total_bytes = 0, current_bytes = 0;
         list* temp = head;
         list* kill = NULL;
         //loops through the remaining list items and prints them out as a leak
@@ -42,7 +42,13 @@ void lib_destroy(){
             real_free(kill);
         fprintf(stderr,"LEAK\t%d\n", current_bytes);
         }
-        fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);
+        fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);*/
+        for(int i = 0; i < array_size; ++i){
+            if(array[i].address != NULL){
+                printf("LEAK    %zu\n", array[i].data);
+            }
+        }
+        printf("TOTAL   %d  %d\n", total, total_bytes);
 }
 
 //remove the node from the linked list and free the data from real memory
@@ -51,7 +57,14 @@ void free(void* ptr){
     if(real_free == NULL){
         real_free = dlsym(RTLD_NEXT, "free");
     }
-    remove_node(ptr);
+    //remove_node(ptr);
+    /*for(int i = 0; i < array_size; ++i){
+        if(array[i].address == ptr){
+            array[i].data = 0;
+            array[i].address = NULL;
+            break;
+        }
+    }*/
     real_free(ptr);
 }
 
@@ -63,11 +76,17 @@ void *malloc(size_t size)
     }
     void *p = NULL;
     p = real_malloc(size);
-    if(check_for_leak == 1)
-        add_node(size, p);
+    list temp;
+    temp.data = size;
+    temp.address = p;
+    array[array_size] = temp;
+    array_size++;
+    printf("malloc %zu %p\n", size, temp.address);
+
+    //add_node(size, p);
     return p;
 }
-
+/*
 //add a new node at the end of the linked list
 void add_node(int byte, void* ptr){
     list *new_node = real_malloc(sizeof(list));
@@ -115,4 +134,4 @@ void remove_node(void* ptr){
         prev->next = current->next;
         real_free(current);
     }
-}
+}*/

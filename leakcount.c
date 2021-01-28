@@ -20,7 +20,7 @@ int main(int argc, char **argv){
             if('.' != c){
                 execvp(argv[0], argv);
             }else{
-                execvpe(argv[0], argv, envp);
+                //execvpe(argv[0], argv, envp);
             }
         }else{
             waitpid(pid, NULL, 0);
