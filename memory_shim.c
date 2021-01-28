@@ -46,8 +46,10 @@ void lib_destroy(){
         }
         fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);*/
         for(int i = 0; i < array_size; ++i){
-            if(array[i].address != NULL){
+            if(array[i].data > 0){
                 fprintf(stderr, "LEAK    %zu\n", array[i].data);
+                total_bytes += array[i].data;
+                total++;
             }
         }
         fprintf(stderr, "TOTAL   %d  %d\n", total, total_bytes);
@@ -63,7 +65,6 @@ void free(void* ptr){
     for(int i = 0; i < array_size; ++i){
         if(array[i].address == ptr){
             array[i].data = 0;
-            array[i].address = NULL;
             break;
         }
     }
