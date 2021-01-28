@@ -65,6 +65,7 @@ void free(void* ptr){
     for(int i = 0; i < array_size; ++i){
         if(array[i].address == ptr){
             array[i].data = 0;
+            array[i].address = 0x0;
             break;
         }
     }
