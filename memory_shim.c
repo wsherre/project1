@@ -119,7 +119,11 @@ void remove_node(void* ptr){
             prev = current;
             current = current->next;
         }
-        prev->next = current->next;
+        if(current->next == NULL)
+            prev->next = NULL;
+        else
+            prev->next = current->next;
+            
         real_free(current);
     }
 }
