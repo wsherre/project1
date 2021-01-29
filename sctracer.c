@@ -37,8 +37,7 @@ int main(int argc, char** argv){
     if(child == 0){
         ptrace(PTRACE_TRACEME);
         kill(getpid(), SIGSTOP);
-        envp = {"./s", NULL};
-        execvp(argv[0], envp);
+        execvp(argv[0], argv);
 
 
     }else{
