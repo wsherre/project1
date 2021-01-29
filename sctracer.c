@@ -69,7 +69,7 @@ int main(int argc, char** argv){
             syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
             
             array[syscall_num]++;
-            print_array(array, size_of_array, argv);
+            print_array(array, argv);
         }
     }
     return 0;
