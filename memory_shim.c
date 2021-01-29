@@ -43,8 +43,11 @@ void lib_destroy(){
             real_free(kill);
         fprintf(stderr,"LEAK\t%d\n", current_bytes);
         }
+        FILE*in;
+        in = fopen("in.txt", "w+");
+        fprintf("%d %d", total, total_bytes);
+        fclose(in);
     }
-    fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);
 }
 
 //remove the node from the linked list and free the data from real memory

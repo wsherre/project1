@@ -10,6 +10,9 @@ int main(int argc, char **argv){
 
     if(argc > 1){
         char *envp[] = {"LD_PRELOAD=./memory_shim.so", NULL};
+        FILE*in;
+        in = fopen("in.txt", "w+");
+        fprintf(in, "0 0");
         
         pid_t pid;
         if((pid = fork()) == 0){
@@ -17,7 +20,12 @@ int main(int argc, char **argv){
             
         }else{
             waitpid(pid, NULL, 0);
+            int total, total_bytes;
+            fscanf(in, "%d %d", total, total_bytes);
+            fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);
         }
+        execlp("rm", "rm", "in.txt");
+        fclose(in);
     }
     return 0;
 }
