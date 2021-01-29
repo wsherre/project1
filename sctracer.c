@@ -35,12 +35,9 @@ int main(int argc, char** argv){
     pid_t child = fork();
     if(child == 0){
         ptrace(PTRACE_TRACEME);
-        kill(getpid(), SIGSTOP);
-        
+        kill(getpid(), SIGSTOP);    
         execvp(vector[0], vector);
-       
-
-
+    
     }else{
         int status,syscall_num;      
         waitpid(child, &status, 0);        
@@ -56,12 +53,11 @@ int main(int argc, char** argv){
             if (WIFEXITED(status)) {
                 exit(1);
             }
-            
+            syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
+        printf("My child called system call #%d.\n",syscall_num);
         } while (!(WIFSTOPPED(status) &&
             WSTOPSIG(status) & 0x80));
 
-        syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
-        printf("My child called system call #%d.\n",syscall_num);
         
         ptrace(PTRACE_CONT, child, NULL, NULL);
         waitpid(child, NULL, 0);
