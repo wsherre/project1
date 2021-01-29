@@ -74,7 +74,7 @@ int main(int argc, char** argv){
                 waitpid(child, &status, 0);
                 syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
                 array_place = find_call(syscall_num, array, size_of_array);
-                if(array_place > 0){
+                if(array_place != -1){
                     array[array_place].num_of_calls++;
                 }else{
                     array[size_of_array].call = syscall_num;
@@ -101,7 +101,7 @@ int find_call(int call, scall array[], int size_of_array){
             return i;
         }
     }
-    return 0;
+    return -1;
 }
 
 void print_array(scall array[], int size_of_array){
