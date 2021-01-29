@@ -41,13 +41,13 @@ int main(int argc, char** argv){
     }*/
     pid_t child = fork();
     if(child == 0){
-        //ptrace(PTRACE_TRACEME);
-        //kill(getpid(), SIGSTOP);
+        ptrace(PTRACE_TRACEME);
+        kill(getpid(), SIGSTOP);
         execvp(argv[0], argv);
 
 
     }else{
-        /*int status,syscall_num;      
+        int status,syscall_num;      
         waitpid(child, &status, 0);        
         ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD);
 
@@ -72,7 +72,7 @@ int main(int argc, char** argv){
         waitpid(child, NULL, 0);
 
 
-    */}
+    }
     
 
 
