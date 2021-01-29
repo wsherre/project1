@@ -11,11 +11,10 @@ int main(int argc, char **argv){
     if(argc > 1){
         char *envp[] = {"LD_PRELOAD=./memory_shim.so", NULL};
         
-        char c =  *argv[0];
         pid_t pid;
         if((pid = fork()) == 0){
             
-            execvpe(argv[1], &argv[1],  envp);
+            execvpe(argv[1], argv + 1,  envp);
             
         }else{
             waitpid(pid, NULL, 0);
