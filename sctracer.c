@@ -18,6 +18,11 @@ void print_array(int array[], char**);
 
 
 int main(int argc, char** argv){
+
+    if(argc < 3){
+        fprintf(stderr, "ERROR: must have at least 3 arguments");
+        exit(1);
+    }
     int array[max_array_size];
     for(int i = 0; i < max_array_size; ++i){
         array[i] = 0;
