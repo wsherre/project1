@@ -82,7 +82,7 @@ int main(int argc, char** argv){
                     size_of_array++;
                 }
             }
-        
+            print_array(array, size_of_array);
         //for this example, I only want the first
         //system call. So...
         //let the child run to completion
