@@ -18,7 +18,7 @@ typedef struct scall{
 }scall;
 
 int find_call(int, scall array[], int);
-int print_array(scall array[], int);
+void print_array(scall array[], int);
 
 
 int main(int argc, char** argv){
@@ -104,7 +104,7 @@ int find_call(int call, scall array[], int size_of_array){
     return 0;
 }
 
-int print_array(scall array[], int size_of_array){
+void print_array(scall array[], int size_of_array){
     for(int i = 0; i < size_of_array; ++i){
         fprintf(stderr, "%d %d\n", array[i].call, array[i].num_of_calls);
     }
