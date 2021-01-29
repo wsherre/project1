@@ -13,7 +13,6 @@ int main(int argc, char **argv){
         FILE*in;
         in = fopen("in.txt", "w+");
         fprintf(in, "0 0");
-        fclose(in);
         
         pid_t pid;
         if((pid = fork()) == 0){
@@ -22,11 +21,11 @@ int main(int argc, char **argv){
         }else{
             waitpid(pid, NULL, 0);
             int total = 0, total_bytes = 0;
-            //fscanf(in, "%d %d", &total, &total_bytes);
+            fscanf(in, "%d %d", &total, &total_bytes);
             fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);
         }
-        //execlp("rm", "rm", "in.txt");
-        //fclose(in);
+        execlp("rm", "rm", "in.txt");
+        fclose(in);
     }
     return 0;
 }

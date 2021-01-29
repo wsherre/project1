@@ -45,7 +45,7 @@ void lib_destroy(){
         }
         FILE*in;
         in = fopen("in.txt", "w+");
-        fprintf("%d %d", total, total_bytes);
+        fprintf(in, "%d %d", total, total_bytes);
         fclose(in);
     }
 }
