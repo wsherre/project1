@@ -115,14 +115,12 @@ void remove_node(void* ptr){
         real_free(head);
         head = NULL;
     }else{
-        while(ptr != current->address){
+        while(current != NULL && ptr != current->address){
             prev = current;
             current = current->next;
         }
-        if(current->next != NULL)
-            prev->next = current->next;
-        else
-            prev->next = NULL;
+        if (current == NULL) return;
+        prev->next = current->next;
 
         real_free(current);
     }
