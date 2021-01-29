@@ -38,7 +38,7 @@ int main(int argc, char** argv){
         kill(getpid(), SIGSTOP);    
         execvp(vector[0], vector);
     
-    }else{int status; waitpid(child, &status, 0);        
+    }else{    
     
         int status,syscall_num;      
         waitpid(child, &status, 0);        
