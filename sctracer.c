@@ -14,12 +14,12 @@
 #define max_array_size 336
 #define vector_size 50
 
-void print_array(scall array[], int, char**);
+void print_array(scall array[], char**);
 
 
 int main(int argc, char** argv){
     int array[max_array_size];
-    for(i = 0; i < max_array_size; ++i){
+    for(itn i = 0; i < max_array_size; ++i){
         array[i] = 0;
     }
     
@@ -61,17 +61,17 @@ int main(int argc, char** argv){
             WSTOPSIG(status) & 0x80));
         
         
-            int array_place = 0;
-            while(!WIFEXITED(status)){
-                ptrace(PTRACE_SYSCALL, child, 0, 0);    
-                //wait for status to change     
-                waitpid(child, &status, 0);
-                syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
-                
-                array[syscall_num]++;
-                print_array(array, size_of_array, argv);
+        int array_place = 0;
+        while(!WIFEXITED(status)){
+            ptrace(PTRACE_SYSCALL, child, 0, 0);    
+            //wait for status to change     
+            waitpid(child, &status, 0);
+            syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
+            
+            array[syscall_num]++;
+            print_array(array, size_of_array, argv);
+        }
     }
-
     return 0;
 }
 
