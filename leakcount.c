@@ -8,6 +8,7 @@
 //first submission to see if i did it right please dont grade my lack of comments
 int main(int argc, char **argv){
 
+    //to avoid seg faults checking the other argument
     if(argc > 1){
         char *envp[] = {"LD_PRELOAD=./memory_shim.so", NULL};
         FILE*in;

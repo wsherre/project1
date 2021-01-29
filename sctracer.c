@@ -11,7 +11,8 @@
 #include <string.h>
 #include <time.h>
 
-#define max_array_size 336
+//highest syscall number in linux + 1 for #0 , + 1 for #-1
+#define max_array_size 337
 //arbitraily chose this number. this detirmines how many args a program can run with
 #define vector_size 50
 
@@ -50,21 +51,6 @@ int main(int argc, char** argv){
         int status,syscall_num;      
         waitpid(child, &status, 0);        
         ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD);
-
-        /*do{         
-            //wait for syscall
-            ptrace(PTRACE_SYSCALL, child, 0, 0);    
-            //wait for status to change     
-            waitpid(child, &status, 0);
-     
-            //exit if child exits
-            if (WIFEXITED(status)) {
-                exit(1);
-            }
-            
-        
-        } while (!(WIFSTOPPED(status) &&
-            WSTOPSIG(status) & 0x80));*/
         
         
         while(!WIFEXITED(status)){
@@ -73,7 +59,10 @@ int main(int argc, char** argv){
             waitpid(child, &status, 0);
             syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
             
-            array[syscall_num]++;
+            if(syscall_num == -1)
+                array[max_array_size - 1]++;
+            else
+                array[syscall_num]++;
             print_array(array, argv);
         }
     }
@@ -84,7 +73,9 @@ int main(int argc, char** argv){
 void print_array(int array[], char** argv){
     FILE *output;
     output = fopen(argv[2], "w+");
-    for(int i = 0; i < max_array_size; ++i){
+    if(array[max_array_size - 1] > 0)
+        fprintf(output, "%d\t%d\n", -1, array[max_array_size - 1]);
+    for(int i = 0; i < max_array_size - 1; ++i){
         if(array[i] > 0)
             fprintf(output, "%d\t%d\n", i, array[i]);
     }
