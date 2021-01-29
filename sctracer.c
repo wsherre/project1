@@ -47,18 +47,20 @@ int main(int argc, char** argv){
     }else{
         int status,syscall_num;      
         waitpid(child, &status, 0);        
-        ptrace(PTRACE_SETOPTIONS, child, 0,
-                PTRACE_O_TRACESYSGOOD);
+        ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD);
 
         do{         
-            ptrace(PTRACE_SYSCALL, child, 0, 0);         
+            //wait for syscall
+            ptrace(PTRACE_SYSCALL, child, 0, 0);    
+            //wait for status to change     
             waitpid(child, &status, 0);
      
+            //exit if child exits
             if (WIFEXITED(status)) {
                 exit(1);
             }
             syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
-            printf("My child called system call #%d.\n",syscall_num);
+            printf("yeye #%d.\n",syscall_num);
         } while (!(WIFSTOPPED(status) &&
             WSTOPSIG(status) & 0x80));
 
