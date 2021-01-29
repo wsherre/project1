@@ -23,21 +23,22 @@ int find_call(int, scall array[], int);
 int main(int argc, char** argv){
     //scall array[max_array_size];
     
-    char *token = strtok(argv[1], " ");
-    char* envp[50];
-    int i = 0;
-    while(token != NULL){
-        envp[i] = token;
-        token = strtok(NULL, " ");
+    char *vector[50];
+    int i = 1;
+    vector[0] = strtok(argv[1], " ");
+    while (vector[i] != NULL){
+        vector[i] = strtok(NULL, " ");
         i++;
     }
-    envp[i] = NULL;
+    vector[i] = NULL;
     
     pid_t child = fork();
     if(child == 0){
         ptrace(PTRACE_TRACEME);
         kill(getpid(), SIGSTOP);
-        execvp(argv[0], argv);
+        
+        execvp(vector[0], vector);
+       
 
 
     }else{
@@ -64,8 +65,6 @@ int main(int argc, char** argv){
         
         ptrace(PTRACE_CONT, child, NULL, NULL);
         waitpid(child, NULL, 0);
-
-
     }
     
 
