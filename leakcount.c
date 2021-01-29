@@ -26,7 +26,7 @@ int main(int argc, char **argv){
             fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);
         }
         //execlp("rm", "rm", "in.txt");
-        fclose(in);
+        //fclose(in);
     }
     return 0;
 }
