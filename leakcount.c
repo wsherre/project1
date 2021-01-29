@@ -32,9 +32,9 @@ int main(int argc, char **argv){
             in = fopen("in.txt", "r");
             fscanf(in, "%d %d", &total, &total_bytes);
             fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);
+            fclose(in);
         }
         execlp("rm", "rm", "in.txt");
-        fclose(in);
     }
     return 0;
 }
