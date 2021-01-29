@@ -41,7 +41,7 @@ int main(int argc, char** argv){
         kill(getpid(), SIGSTOP);
         printf("hey\n");
         printf("hey\n");
-        child = getpid();
+        execvp(argv[0], argv + 1);
 
 
     }else{
