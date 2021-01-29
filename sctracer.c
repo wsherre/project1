@@ -18,7 +18,7 @@ typedef struct scall{
 }scall;
 
 int find_call(int, scall array[], int);
-int print_array(scall, int);
+int print_array(scall array[], int);
 
 
 int main(int argc, char** argv){
