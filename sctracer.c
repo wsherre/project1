@@ -11,14 +11,15 @@
 #include <string.h>
 #include <time.h>
 
-#define max_array_size 320
+#define max_array_size 336
+#define vector_size 50
 typedef struct scall{
     int call;
     int num_of_calls;
 }scall;
 
 int find_call(int, scall array[], int);
-void print_array(scall array[], int);
+void print_array(scall array[], int, char**);
 void quicksort(scall number[25],int first,int last);
 
 
@@ -26,7 +27,7 @@ int main(int argc, char** argv){
     scall array[max_array_size];
     int size_of_array = 0;
     
-    char *vector[50];
+    char *vector[vector_size];
     int i = 1;
     vector[0] = strtok(argv[1], " ");
     while (vector[i] != NULL){
@@ -40,8 +41,7 @@ int main(int argc, char** argv){
         ptrace(PTRACE_TRACEME);
         kill(getpid(), SIGSTOP);    
         execvp(vector[0], vector);
-        //printf("hey\n");
-        //int child = getpid();
+    
     
     }else{    
     
@@ -60,9 +60,6 @@ int main(int argc, char** argv){
                 exit(1);
             }
             
-        //for this example, I only want the first
-        //system call. So...
-        //let the child run to completion
         
         } while (!(WIFSTOPPED(status) &&
             WSTOPSIG(status) & 0x80));
@@ -84,16 +81,10 @@ int main(int argc, char** argv){
                 }
             }
             quicksort(array, 0, size_of_array - 1);
-            print_array(array, size_of_array);
-        //for this example, I only want the first
-        //system call. So...
-        //let the child run to completion
-        //ptrace(PTRACE_CONT, child, NULL, NULL);
-        //waitpid(child, NULL, 0);
+            print_array(array, size_of_array, argv);
     }
-    
 
-
+    return 0;
 }
 
 int find_call(int call, scall array[], int size_of_array){
@@ -106,10 +97,13 @@ int find_call(int call, scall array[], int size_of_array){
     return -1;
 }
 
-void print_array(scall array[], int size_of_array){
+void print_array(scall array[], int size_of_array, char** argv){
+    FILE *output;
+    output = fopen(argv[2], "w+");
     for(int i = 0; i < size_of_array; ++i){
-        fprintf(stderr, "%d %d\n", array[i].call, array[i].num_of_calls);
+        fprintf(output, "%d %d\n", array[i].call, array[i].num_of_calls);
     }
+    fclose(output);
 }
 
 void quicksort(scall number[25],int first,int last){
