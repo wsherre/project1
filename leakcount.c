@@ -15,11 +15,15 @@ int main(int argc, char **argv){
         fprintf(in, "0 0");
         fclose(in);
         
+        char c = *argv[1];
         pid_t pid;
         if((pid = fork()) == 0){
-            argv = argv + 1;
-            char *temp[] = {"cat", "makefile", NULL};
-            execvp(temp[0], temp);
+            argv = argv+1;
+            if(c == '.'){
+                execvpe(argv[0], argv, envp);
+            }else{
+                execvp(argv[0], argv);
+            }
 
             
         }else{
