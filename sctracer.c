@@ -55,11 +55,11 @@ int main(int argc, char** argv){
             }
             syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
         printf("My child called system call #%d.\n",syscall_num);
+        ptrace(PTRACE_CONT, child, NULL, NULL);
         } while (!(WIFSTOPPED(status) &&
             WSTOPSIG(status) & 0x80));
 
         
-        ptrace(PTRACE_CONT, child, NULL, NULL);
         waitpid(child, NULL, 0);
     }
     
