@@ -41,6 +41,7 @@ int main(int argc, char** argv){
         kill(getpid(), SIGSTOP);
         printf("hey\n");
         printf("hey\n");
+        child = getpid();
 
 
     }else{
@@ -56,14 +57,12 @@ int main(int argc, char** argv){
             if (WIFEXITED(status)) {
                 exit(1);
             }
-            syscall_num = ptrace(PTRACE_PEEKUSER,
-            child, sizeof(long)*ORIG_RAX, NULL);
+            syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
             printf("My child called system call #%d.\n",syscall_num);
         } while (!(WIFSTOPPED(status) &&
             WSTOPSIG(status) & 0x80));
 
-        syscall_num = ptrace(PTRACE_PEEKUSER,
-            child, sizeof(long)*ORIG_RAX, NULL);
+        syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
         printf("My child called system call #%d.\n",syscall_num);
         
         ptrace(PTRACE_CONT, child, NULL, NULL);
