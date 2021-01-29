@@ -19,7 +19,7 @@ int main(int argc, char **argv){
         if((pid = fork()) == 0){
             argv = argv + 1;
             char *temp[] = {"cat", "makefile", NULL};
-            execvpe(temp[0], temp,  envp);
+            execvp(temp[0], temp);
 
             
         }else{
