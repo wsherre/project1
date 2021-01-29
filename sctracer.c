@@ -36,8 +36,8 @@ int main(int argc, char** argv){
     if(child == 0){
         ptrace(PTRACE_TRACEME);
         kill(getpid(), SIGSTOP); 
-        vector = {"./s", "2", NULL};   
-        execvp(vector[0], vector);
+        char *vector[] = {"./s", "2", NULL};   
+        execvp(v[0], v);
     
     }else{
         int status,syscall_num;      
