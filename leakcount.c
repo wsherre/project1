@@ -20,8 +20,8 @@ int main(int argc, char **argv){
             
         }else{
             waitpid(pid, NULL, 0);
-            int total, total_bytes;
-            fscanf(in, "%d %d", total, total_bytes);
+            int total = 0, total_bytes = 0;
+            fscanf(in, "%d %d", &total, &total_bytes);
             fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);
         }
         execlp("rm", "rm", "in.txt");
