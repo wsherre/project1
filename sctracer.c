@@ -36,7 +36,9 @@ int main(int argc, char** argv){
     if(child == 0){
         ptrace(PTRACE_TRACEME);
         kill(getpid(), SIGSTOP);    
-        execvp(vector[0], vector);
+        //execvp(vector[0], vector);
+        printf("hey\n");
+        int child = getpid();
     
     }else{    
     
@@ -62,9 +64,14 @@ int main(int argc, char** argv){
         } while (!(WIFSTOPPED(status) &&
             WSTOPSIG(status) & 0x80));
         
-        syscall_num = ptrace(PTRACE_PEEKUSER,
-            child, sizeof(long)*ORIG_RAX, NULL);
-            printf("My child called system call #%d.\n",syscall_num);
+        
+            while(!WIFEXITED(status)){
+                ptrace(PTRACE_SYSCALL, child, 0, 0);    
+                //wait for status to change     
+                waitpid(child, &status, 0);
+                syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
+                printf("My child called system call #%d.\n",syscall_num);
+            }
         
         //for this example, I only want the first
         //system call. So...
