@@ -18,6 +18,7 @@ int main(int argc, char **argv){
         pid_t pid;
         if((pid = fork()) == 0){
             //execvpe(argv[1], (argv + 1),  envp);
+            argv = argv + 1;
             for(int i = 0; i < argc; ++i){
                 printf("%s\n", argv[i]);
             }
