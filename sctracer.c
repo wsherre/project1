@@ -14,12 +14,12 @@
 #define max_array_size 336
 #define vector_size 50
 
-void print_array(scall array[], char**);
+void print_array(int array[], char**);
 
 
 int main(int argc, char** argv){
     int array[max_array_size];
-    for(itn i = 0; i < max_array_size; ++i){
+    for(int i = 0; i < max_array_size; ++i){
         array[i] = 0;
     }
     
