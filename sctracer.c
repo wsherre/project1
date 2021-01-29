@@ -36,9 +36,9 @@ int main(int argc, char** argv){
     if(child == 0){
         ptrace(PTRACE_TRACEME);
         kill(getpid(), SIGSTOP);    
-        //execvp(vector[0], vector);
-        printf("hey\n");
-        int child = getpid();
+        execvp(vector[0], vector);
+        //printf("hey\n");
+        //int child = getpid();
     
     }else{    
     
