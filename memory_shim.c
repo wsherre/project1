@@ -43,9 +43,9 @@ void lib_destroy(){
             real_free(kill);
         fprintf(stderr,"LEAK\t%d\n", current_bytes);
         }
-        //FILE*in = fopen("in.txt", "w+");
-        fprintf(stderr, "%d %d\n", total, total_bytes);
-        //fclose(in);
+        FILE*in = fopen("in.txt", "r+");
+        fprintf(in, "%d %d\n", total, total_bytes);
+        fclose(in);
     }
 }
 
