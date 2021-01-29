@@ -12,6 +12,7 @@
 #include <time.h>
 
 #define max_array_size 336
+//arbitraily chose this number. this detirmines how many args a program can run with
 #define vector_size 50
 
 void print_array(int array[], char**);
@@ -20,7 +21,7 @@ void print_array(int array[], char**);
 int main(int argc, char** argv){
 
     if(argc < 3){
-        fprintf(stderr, "ERROR: must have at least 3 arguments");
+        fprintf(stderr, "ERROR: must have at least 3 arguments\n");
         exit(1);
     }
     int array[max_array_size];
@@ -50,7 +51,7 @@ int main(int argc, char** argv){
         waitpid(child, &status, 0);        
         ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD);
 
-        do{         
+        /*do{         
             //wait for syscall
             ptrace(PTRACE_SYSCALL, child, 0, 0);    
             //wait for status to change     
@@ -63,10 +64,9 @@ int main(int argc, char** argv){
             
         
         } while (!(WIFSTOPPED(status) &&
-            WSTOPSIG(status) & 0x80));
+            WSTOPSIG(status) & 0x80));*/
         
         
-        int array_place = 0;
         while(!WIFEXITED(status)){
             ptrace(PTRACE_SYSCALL, child, 0, 0);    
             //wait for status to change     
