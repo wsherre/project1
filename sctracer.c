@@ -82,6 +82,7 @@ int main(int argc, char** argv){
                     size_of_array++;
                 }
             }
+            quicksort(array, 0, size_of_array - 1);
             print_array(array, size_of_array);
         //for this example, I only want the first
         //system call. So...
@@ -108,4 +109,41 @@ void print_array(scall array[], int size_of_array){
     for(int i = 0; i < size_of_array; ++i){
         fprintf(stderr, "%d %d\n", array[i].call, array[i].num_of_calls);
     }
+}
+
+void quicksort(int number[25],int first,int last){
+   int i, j, pivot;
+   scall temp;
+
+   if(first<last){
+      pivot=first;
+      i=first;
+      j=last;
+
+      while(i<j){
+         while(number[i].call<=number[pivot].call&&i<last)
+            i++;
+         while(number[j].call>number[pivot].call)
+            j--;
+         if(i<j){
+            temp.call=number[i].call;
+            temp.num_of_calls = number[i].num_of_calls;
+            number[i].call=number[j].call;
+            number[i].num_of_calls=number[j].num_of_calls;
+            number[j].call=temp.call;
+            number[j].num_of_calls=temp.num_of_calls;
+         }
+      }
+
+        temp.call=number[pivot].call;
+        temp.num_of_calls = number[pivot].num_of_calls;
+        number[pivot].call=number[j].call;
+        number[pivot].num_of_calls=number[j].num_of_calls;
+        number[j].call=temp.call;
+        number[j].num_of_calls=temp.num_of_calls;
+
+        quicksort(number,first,j-1);
+        quicksort(number,j+1,last);
+
+   }
 }
