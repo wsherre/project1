@@ -13,19 +13,15 @@
 
 #define max_array_size 336
 #define vector_size 50
-typedef struct scall{
-    int call;
-    int num_of_calls;
-}scall;
 
-int find_call(int, scall array[], int);
 void print_array(scall array[], int, char**);
-void quicksort(scall number[25],int first,int last);
 
 
 int main(int argc, char** argv){
-    scall array[max_array_size];
-    int size_of_array = 0;
+    int array[max_array_size];
+    for(i = 0; i < max_array_size; ++i){
+        array[i] = 0;
+    }
     
     char *vector[vector_size];
     int i = 1;
@@ -71,74 +67,21 @@ int main(int argc, char** argv){
                 //wait for status to change     
                 waitpid(child, &status, 0);
                 syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
-                array_place = find_call(syscall_num, array, size_of_array);
-                if(array_place != -1){
-                    array[array_place].num_of_calls++;
-                }else{
-                    array[size_of_array].call = syscall_num;
-                    array[size_of_array].num_of_calls = 1;
-                    size_of_array++;
-                }
-            }
-            quicksort(array, 0, size_of_array - 1);
-            print_array(array, size_of_array, argv);
+                
+                array[syscall_num]++;
+                print_array(array, size_of_array, argv);
     }
 
     return 0;
 }
 
-int find_call(int call, scall array[], int size_of_array){
 
-    for(int i = 0; i < size_of_array; ++i){
-        if(array[i].call == call){
-            return i;
-        }
-    }
-    return -1;
-}
-
-void print_array(scall array[], int size_of_array, char** argv){
+void print_array(int array[], char** argv){
     FILE *output;
     output = fopen(argv[2], "w+");
-    for(int i = 0; i < size_of_array; ++i){
-        fprintf(output, "%d %d\n", array[i].call, array[i].num_of_calls);
+    for(int i = 0; i < max_array_size; ++i){
+        if(array[i] > 0)
+            fprintf(output, "%d\t%d\n", i, array[i]);
     }
     fclose(output);
-}
-
-void quicksort(scall number[25],int first,int last){
-   int i, j, pivot;
-   scall temp;
-
-   if(first<last){
-      pivot=first;
-      i=first;
-      j=last;
-
-      while(i<j){
-         while(number[i].call<=number[pivot].call&&i<last)
-            i++;
-         while(number[j].call>number[pivot].call)
-            j--;
-         if(i<j){
-            temp.call=number[i].call;
-            temp.num_of_calls = number[i].num_of_calls;
-            number[i].call=number[j].call;
-            number[i].num_of_calls=number[j].num_of_calls;
-            number[j].call=temp.call;
-            number[j].num_of_calls=temp.num_of_calls;
-         }
-      }
-
-        temp.call=number[pivot].call;
-        temp.num_of_calls = number[pivot].num_of_calls;
-        number[pivot].call=number[j].call;
-        number[pivot].num_of_calls=number[j].num_of_calls;
-        number[j].call=temp.call;
-        number[j].num_of_calls=temp.num_of_calls;
-
-        quicksort(number,first,j-1);
-        quicksort(number,j+1,last);
-
-   }
 }
