@@ -21,7 +21,8 @@ int find_call(int, scall array[], int);
 
 
 int main(int argc, char** argv){
-    //scall array[max_array_size];
+    scall array[max_array_size];
+    int size_of_array = 0;
     
     char *vector[50];
     int i = 1;
@@ -65,19 +66,27 @@ int main(int argc, char** argv){
             WSTOPSIG(status) & 0x80));
         
         
+            int array_place = 0;
             while(!WIFEXITED(status)){
                 ptrace(PTRACE_SYSCALL, child, 0, 0);    
                 //wait for status to change     
                 waitpid(child, &status, 0);
                 syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
-                printf("My child called system call #%d.\n",syscall_num);
+                array_place = find_call(syscall_num, array, size_of_array);
+                if(array_place > 0){
+                    array[array_place].num_of_calls++;
+                }else{
+                    array[size_of_array].call = syscall_num;
+                    array[size_of_array].num_of_calls = 1;
+                    size_of_array++;
+                }
             }
         
         //for this example, I only want the first
         //system call. So...
         //let the child run to completion
-        ptrace(PTRACE_CONT, child, NULL, NULL);
-        waitpid(child, NULL, 0);
+        //ptrace(PTRACE_CONT, child, NULL, NULL);
+        //waitpid(child, NULL, 0);
     }
     
 
@@ -88,8 +97,14 @@ int find_call(int call, scall array[], int size_of_array){
 
     for(int i = 0; i < size_of_array; ++i){
         if(array[i].call == call){
-            return 1;
+            return i;
         }
     }
     return 0;
+}
+
+int print_array(scall array[], int size_of_array){
+    for(int i = 0; i < size_of_array; ++i){
+        fprintf(stderr, "%d %d\n", array[i].call, array[i].num_of_calls);
+    }
 }
