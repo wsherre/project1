@@ -39,8 +39,6 @@ int main(int argc, char** argv){
     if(child == 0){
         ptrace(PTRACE_TRACEME);
         kill(getpid(), SIGSTOP);
-        printf("hey\n");
-        printf("hey\n");
         execvp(argv[0], argv + 1);
 
 
@@ -59,8 +57,7 @@ int main(int argc, char** argv){
             if (WIFEXITED(status)) {
                 exit(1);
             }
-            syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
-            printf("yeye #%d.\n",syscall_num);
+            
         } while (!(WIFSTOPPED(status) &&
             WSTOPSIG(status) & 0x80));
 
