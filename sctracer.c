@@ -72,8 +72,9 @@ int main(int argc, char** argv){
         waitpid(child, NULL, 0);
 
 
-    }
-    */
+    */}
+    
+
 
 }
 
