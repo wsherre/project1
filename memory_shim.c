@@ -31,20 +31,7 @@ void lib_init(){
 
 void lib_destroy(){
         int total = 0, total_bytes = 0;
-        /*int total = 0, total_bytes = 0, current_bytes = 0;
-        list* temp = head;
-        list* kill = NULL;
-        //loops through the remaining list items and prints them out as a leak
-        while(temp != NULL){
-            total++;
-            total_bytes += temp->data;
-            current_bytes = temp->data;
-            kill = temp;
-            temp = temp->next;
-            real_free(kill);
-        fprintf(stderr,"LEAK\t%d\n", current_bytes);
-        }
-        fprintf(stderr, "TOTAL\t%d\t%d\n", total, total_bytes);*/
+        
         for(int i = 0; i < array_size; ++i){
             if(array[i].data > 0){
                 fprintf(stderr, "LEAK    %zu\n", array[i].data);
@@ -61,7 +48,6 @@ void free(void* ptr){
     if(real_free == NULL){
         real_free = dlsym(RTLD_NEXT, "free");
     }
-    //remove_node(ptr);
     for(int i = 0; i < array_size; ++i){
         if(array[i].address == ptr){
             array[i].data = 0;
@@ -85,57 +71,7 @@ void *malloc(size_t size)
     temp.address = p;
     array[array_size] = temp;
     array_size++;
-    //fprintf(stderr, "malloc %zu  %p\n", temp.data, temp.address);
-
-    //add_node(size, p);
+    
     return p;
 }
-/*
-//add a new node at the end of the linked list
-void add_node(int byte, void* ptr){
-    list *new_node = real_malloc(sizeof(list));
-    new_node->data = byte;
-    new_node->address = ptr;
-    list* prev = head;
-    list* current = head;
 
-    if(head == NULL){
-        head = new_node;
-    }else{
-        current = current->next;
-
-        while(current != NULL){
-            prev = current;
-            current = current->next;
-        }
-        
-        prev->next = new_node;
-        new_node->next = NULL;
-    }
-}
-
-//remove the node with the proper memory address 
-//then free that memory
-void remove_node(void* ptr){
-    list* prev = head;
-    list* current = head;
-
-    if(head->next != NULL){ 
-        current = current->next;
-    }
-    if(head->address == ptr && head->next != NULL){
-        list* temp = head;
-        head = head->next;
-        real_free(temp);
-    }else if(head->address == ptr && head->next == NULL){
-        real_free(head);
-        head = NULL;
-    }else{
-        while(current != NULL && ptr != current->address){
-            prev = current;
-            current = current->next;
-        }
-        prev->next = current->next;
-        real_free(current);
-    }
-}*/
