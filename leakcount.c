@@ -13,8 +13,7 @@ int main(int argc, char **argv){
         
         pid_t pid;
         if((pid = fork()) == 0){
-            
-            execvpe(argv[1], argv + 1,  envp);
+            execvpe(argv[1], *(argv + 1),  envp);
             
         }else{
             waitpid(pid, NULL, 0);
