@@ -23,6 +23,10 @@ int find_call(int, scall array[], int);
 int main(int argc, char** argv){
     scall array[max_array_size];
 
+    for(int i = 0; i < argc; ++i){
+            argv[i] = argv[i+1];
+        }
+        argv[argc] = NULL;
     /*char *token = strtok(argv[1], " ");
     char *envp[20];
     int i = 0;
@@ -37,13 +41,13 @@ int main(int argc, char** argv){
     }*/
     pid_t child = fork();
     if(child == 0){
-        ptrace(PTRACE_TRACEME);
-        kill(getpid(), SIGSTOP);
-        execvp(argv[0], argv + 1);
+        //ptrace(PTRACE_TRACEME);
+        //kill(getpid(), SIGSTOP);
+        execvp(argv[0], argv);
 
 
     }else{
-        int status,syscall_num;      
+        /*int status,syscall_num;      
         waitpid(child, &status, 0);        
         ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD);
 
@@ -69,7 +73,7 @@ int main(int argc, char** argv){
 
 
     }
-    
+    */
 
 }
 
