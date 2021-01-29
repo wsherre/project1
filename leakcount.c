@@ -17,7 +17,11 @@ int main(int argc, char **argv){
         
         pid_t pid;
         if((pid = fork()) == 0){
-            execvpe(argv[1], (argv + 1),  envp);
+            //execvpe(argv[1], (argv + 1),  envp);
+            for(int i = 0; i < argc - 1; ++i){
+                printf("%s\n", *argv[i]);
+            }
+
             
         }else{
             waitpid(pid, NULL, 0);
