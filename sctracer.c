@@ -19,6 +19,7 @@ typedef struct scall{
 
 int find_call(int, scall array[], int);
 void print_array(scall array[], int);
+void quicksort(scall number[25],int first,int last);
 
 
 int main(int argc, char** argv){
@@ -111,7 +112,7 @@ void print_array(scall array[], int size_of_array){
     }
 }
 
-void quicksort(int number[25],int first,int last){
+void quicksort(scall number[25],int first,int last){
    int i, j, pivot;
    scall temp;
 
