@@ -64,10 +64,6 @@ int main(int argc, char** argv){
         waitpid(child, NULL, 0);
         } while (!(WIFSTOPPED(status) &&
             WSTOPSIG(status) & 0x80));
-
-        syscall_num = ptrace(PTRACE_PEEKUSER,
-            child, sizeof(long)*ORIG_RAX, NULL);
-        printf("My child called system call #%d.\n",syscall_num);
         
         //for this example, I only want the first
         //system call. So...
