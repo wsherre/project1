@@ -31,10 +31,11 @@ int main(int argc, char** argv){
     for(int k = 0; k < i; ++k){
         printf("%s\n", envp[k]);
     }
-    if(fork() == 0){
+    pid_t child = fork();
+    if(child == 0){
         ptrace(PTRACE_TRACEME);
         kill(getpid(), SIGSTOP);
-        int child = getpid();
+        child = getpid();
         clock_t c = clock();
         write(STDOUT_FILENO, "Hello. I'm childish.\n",21);
         printf("time = %ld\n",c);
