@@ -107,13 +107,13 @@ void remove_node(void* ptr){
     if(list_size > 1){ 
         current = current->next;
     }
-    if(head->address == ptr && list_size > 1){
+    if(head->address == ptr && list_size == 1){
+        real_free(head);
+        head = NULL;
+    }else if(head->address == ptr && list_size > 1){
         list* temp = head;
         head = head->next;
         real_free(temp);
-    }else if(head->address == ptr && list_size == 1){
-        real_free(head);
-        head = NULL;
     }else{
         while(current != NULL && ptr != current->address){
             prev = current;
