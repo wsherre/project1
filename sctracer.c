@@ -11,7 +11,7 @@
 #include <string.h>
 #include <time.h>
 
-//highest syscall number in linux + 1 for #0 , + 1 for #-1
+//highest syscall number in linux(335) + 1 for #0 , + 1 for #-1
 #define max_array_size 337
 //arbitraily chose this number. this detirmines how many args a program can run with
 #define vector_size 50
