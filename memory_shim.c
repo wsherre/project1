@@ -57,9 +57,9 @@ void free(void* ptr){
     }
     if(list_size > 0){
         remove_node(ptr);
-        real_free(ptr);
         list_size--;
     }
+    real_free(ptr);
 }
 
 //assign real memory and add the node into the linked list
