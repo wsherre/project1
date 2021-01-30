@@ -56,7 +56,7 @@ void free(void* ptr){
         real_free = dlsym(RTLD_NEXT, "free");
     }
     remove_node(ptr);
-    list_size--;
+    if(list_size > 0) list_size--;
     real_free(ptr);
 }
 
