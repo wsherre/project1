@@ -55,9 +55,11 @@ void free(void* ptr){
     if(real_free == NULL){
         real_free = dlsym(RTLD_NEXT, "free");
     }
-    remove_node(ptr);
-    if(list_size > 0) list_size--;
-    real_free(ptr);
+    if(list_size > 0){
+        remove_node(ptr);
+        real_free(ptr);
+        list_size--;
+    }
 }
 
 //assign real memory and add the node into the linked list
