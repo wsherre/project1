@@ -20,13 +20,8 @@ int main(int argc, char **argv){
         pid_t pid;
         if((pid = fork()) == 0){
             argv = argv+1;
-            //if(c == '.'){
-                execvpe(argv[0], argv, envp);
-            //}else{
-                //execvp(argv[0], argv);
-            //}
+            execvpe(argv[0], argv, envp);
 
-            
         }else{
             waitpid(pid, NULL, 0);
             int total = 0, total_bytes = 0;
