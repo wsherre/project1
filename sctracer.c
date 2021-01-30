@@ -63,9 +63,9 @@ int main(int argc, char** argv){
                 array[max_array_size - 1]++;
             else
                 array[syscall_num]++;
-            print_array(array, argv);
         }
     }
+    print_array(array, argv);
     return 0;
 }
 
