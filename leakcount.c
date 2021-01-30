@@ -20,11 +20,11 @@ int main(int argc, char **argv){
         pid_t pid;
         if((pid = fork()) == 0){
             argv = argv+1;
-            if(c == '.'){
+            //if(c == '.'){
                 execvpe(argv[0], argv, envp);
-            }else{
+            //}else{
                 execvp(argv[0], argv);
-            }
+            //}
 
             
         }else{
