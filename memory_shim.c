@@ -104,14 +104,14 @@ void add_node(int byte, void* ptr){
 void remove_node(void* ptr){
     list* prev = head;
     list* current = head;
-    if(head->next != NULL){ 
+    if(list_size > 1){ 
         current = current->next;
     }
-    if(head->address == ptr && list_size > 0){
+    if(head->address == ptr && list_size > 1){
         list* temp = head;
         head = head->next;
         real_free(temp);
-    }else if(head->address == ptr && list_size == 0){
+    }else if(head->address == ptr && list_size == 1){
         real_free(head);
         head = NULL;
     }else{

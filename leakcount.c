@@ -23,7 +23,7 @@ int main(int argc, char **argv){
             //if(c == '.'){
                 execvpe(argv[0], argv, envp);
             //}else{
-                execvp(argv[0], argv);
+                //execvp(argv[0], argv);
             //}
 
             
