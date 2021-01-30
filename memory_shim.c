@@ -104,24 +104,26 @@ void add_node(int byte, void* ptr){
 void remove_node(void* ptr){
     list* prev = head;
     list* current = head;
-    if(list_size > 1){ 
-        current = current->next;
-    }
-    if(head->address == ptr && list_size == 1){
-        real_free(head);
-        head = NULL;
-    }else if(head->address == ptr && list_size > 1){
-        list* temp = head;
-        head = head->next;
-        real_free(temp);
-    }else{
-        while(current != NULL && ptr != current->address){
-            prev = current;
+    if(list_size > 0){
+        if(list_size > 1){ 
             current = current->next;
         }
-        if (current == NULL) return;
-        prev->next = current->next;
+        if(head->address == ptr && list_size == 1){
+            real_free(head);
+            head = NULL;
+        }else if(head->address == ptr && list_size > 1){
+            list* temp = head;
+            head = head->next;
+            real_free(temp);
+        }else{
+            while(current != NULL && ptr != current->address){
+                prev = current;
+                current = current->next;
+            }
+            if (current == NULL) return;
+            prev->next = current->next;
 
-        real_free(current);
+            real_free(current);
+        }
     }
 }
