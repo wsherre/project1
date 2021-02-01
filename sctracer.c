@@ -11,8 +11,8 @@
 #include <string.h>
 #include <time.h>
 
-//highest syscall number in linux(335) + 1 for #0 , + 1 for #-1
-#define max_array_size 337
+//highest syscall number in linux(335) + 1 for #0 ,
+#define max_array_size 336
 //arbitraily chose this number. this detirmines how many args a program can run with
 #define vector_size 50
 
@@ -98,8 +98,6 @@ int main(int argc, char** argv){
 void print_array(int array[], char** argv){
     FILE *output;
     output = fopen(argv[2], "w+");
-    if(array[max_array_size - 1] > 0)
-        fprintf(output, "%d\t%d\n", -1, array[max_array_size - 1]);
     for(int i = 0; i < max_array_size - 1; ++i){
         if(array[i] > 0)
             fprintf(output, "%d\t%d\n", i, array[i]);
