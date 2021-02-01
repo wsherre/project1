@@ -31,9 +31,10 @@ void lib_destroy(){
     int total = 0, total_bytes = 0, current_bytes = 0;
     list* temp = head;
     list* kill = NULL;
+    FILE*in = fopen("in.txt", "r+");
     //loops through the remaining list items and prints them out as a leak
     if(list_size > 0){
-        FILE*in = fopen("in.txt", "r+");
+        
         while(temp != NULL){
             total++;
             total_bytes += temp->data;
@@ -46,8 +47,10 @@ void lib_destroy(){
         }
         fprintf(in, "-1\n");
         fprintf(in, "%d %d\n", total, total_bytes);
-        fclose(in);
+    }else{
+        fprintf(in, "-1\n");
     }
+    fclose(in);
 }
 
 //remove the node from the linked list and free the data from real memory
