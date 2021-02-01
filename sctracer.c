@@ -51,15 +51,17 @@ int main(int argc, char** argv){
         int status,syscall_num;
         //I'm the parent...keep tabs on that child process
         //wait for the child to stop itself
+
+
+        do{
+
+
             waitpid(child, &status, 0);
 
             //this option makes it easier to distinguish normal traps from
             //system calls
             ptrace(PTRACE_SETOPTIONS, child, 0,
                     PTRACE_O_TRACESYSGOOD);
-
-
-        do{
             
             do{
                 //Request: I want to wait for a system call
