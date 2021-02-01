@@ -56,7 +56,7 @@ void lib_destroy(){
         //print the total
         fprintf(in, "%d %d\n", total, total_bytes);
     }else{
-        //fprintf(in, "-1\n0 0\n");
+        fprintf(in, "-1\n0 0\n");
     }
     //close the file
     fclose(in);
