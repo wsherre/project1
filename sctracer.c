@@ -92,7 +92,7 @@ int main(int argc, char** argv){
             //ptrace(PTRACE_CONT, child, NULL, NULL);
             //waitpid(child, NULL, 0);
 
-        }while(!(WIFSTOPPED(status));
+        }while(!(WIFSTOPPED(status)));
     }
     print_array(array, argv);
     return 0;
