@@ -88,7 +88,7 @@ int main(int argc, char** argv){
         //for this example, I only want the first
         //system call. So...
         //let the child run to completion
-        }
+        
     }
     print_array(array, argv);
     return 0;
