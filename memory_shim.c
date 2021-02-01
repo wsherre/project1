@@ -22,7 +22,7 @@ int check_for_leak = 0;
 int list_size = 0;
 
 void lib_init(){
-    //ensures the list will only run after the library call
+    //ensures the list will only add nodes after the library is initialized
     check_for_leak = 1;
 }
 
