@@ -12,7 +12,7 @@ void (*real_free)(void*)=NULL;
 //each malloc call will be held as a struct with a memory address and byte number
 //it'll be stored in a link list
 typedef struct list{
-    int data;
+    size_t data;
     void* address;
     struct list *next;
 }list;
