@@ -17,6 +17,8 @@ typedef struct list{
     struct list *next;
 }list;
 
+
+//globals such as head and size of list
 list *head = NULL;
 int check_for_leak = 0;
 int list_size = 0;
@@ -27,14 +29,18 @@ void lib_init(){
 }
 
 void lib_destroy(){
+    //just a reset
     check_for_leak = 0;
     int total = 0, total_bytes = 0, current_bytes = 0;
     list* temp = head;
     list* kill = NULL;
-    FILE*in = fopen("in.txt", "r+");
+    //open the input file
+    FILE*in = fopen("in.txt", "w+");
     //loops through the remaining list items and prints them out as a leak
+    //if size is 0 then there are no leaks
     if(list_size > 0){
         
+        //loop through list printing leaks to file
         while(temp != NULL){
             total++;
             total_bytes += temp->data;
@@ -45,11 +51,14 @@ void lib_destroy(){
             real_free(kill);
             fprintf(in,"%d\n", current_bytes);
         }
+        //print break point
         fprintf(in, "-1\n");
+        //print the total
         fprintf(in, "%d %d\n", total, total_bytes);
     }else{
-        fprintf(in, "-1\n");
+        //fprintf(in, "-1\n0 0\n");
     }
+    //close the file
     fclose(in);
 }
 

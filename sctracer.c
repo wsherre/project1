@@ -21,15 +21,21 @@ void print_array(int array[], char**);
 
 int main(int argc, char** argv){
 
+    //need at least executable, executable to trace, output file
     if(argc < 3){
         fprintf(stderr, "ERROR: must have at least 3 arguments\n");
         exit(1);
     }
+    //make an array that will hold the syscalls. the syscall number will be the index of
+    //the array. the value will be the amount of syscalls are made
     int array[max_array_size];
+    //initialize to 0
     for(int i = 0; i < max_array_size; ++i){
         array[i] = 0;
     }
     
+
+    //create a vector for the second argument. this will take the string and separate it
     char *vector[vector_size];
     int i = 1;
     vector[0] = strtok(argv[1], " ");
@@ -39,65 +45,55 @@ int main(int argc, char** argv){
     }
     vector[i] = NULL;
     
+    //fork
     pid_t child = fork();
     if(child == 0){
+        //allow the child to be traced
         ptrace(PTRACE_TRACEME);
-        kill(getpid(), SIGSTOP);    
+        //give the parent time to trace
+        kill(getpid(), SIGSTOP);   
+        //run the thing 
         execvp(vector[0], vector);
     
     
     }else{    
-    
         int status,syscall_num;
-        //I'm the parent...keep tabs on that child process
-        //wait for the child to stop itself
-
 
         while(1){
 
-            //Request: I want to wait for a system call
+                //request syscall
                 ptrace(PTRACE_SYSCALL, child, 0, 0);
 
-                //actually wait for child status to change
+                //wait for child to stop
                 waitpid(child, &status, 0);
 
 
-                //this option makes it easier to distinguish normal traps from
-                //system calls
+                //set the option to check for traps
                 ptrace(PTRACE_SETOPTIONS, child, 0,
                         PTRACE_O_TRACESYSGOOD);
             
             do{
-
+                //request syscall
                 ptrace(PTRACE_SYSCALL, child, 0, 0);
 
                 //actually wait for child status to change
                 waitpid(child, &status, 0);
-                //there are differented reasons that a child's
-                //status might change. Check to see if the child
-                //exited
+                
+
+                //if child exits print array to output file and exit
                 if (WIFEXITED(status)) {
                     //the child exited...let's exit too
                     print_array(array, argv);
                     exit(1);
                 }
                 
-                //wait until the process is stopped or bit 7 is set in
-                //the status (see man page comment on
-                //PTRACE_O_TRACESYSGOOD)
+                //wait until the process is stopped or bit 7 is set in status
             } while (!(WIFSTOPPED(status) && WSTOPSIG(status) & 0x80));
 
             //read out the saved value of the RAX register,
-            //which contains the system call number
-            //For 32-bit machines, you would use EAX.
             syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
+            //update numerical value in the array
             array[syscall_num]++;
-            
-            //for this example, I only want the first
-            //system call. So...
-            //let the child run to completion
-            //ptrace(PTRACE_CONT, child, NULL, NULL);
-            //waitpid(child, NULL, 0);
 
         }
     }
@@ -106,6 +102,7 @@ int main(int argc, char** argv){
 
 
 void print_array(int array[], char** argv){
+    //just print the array out to the output file
     FILE *output;
     output = fopen(argv[2], "w+");
     for(int i = 0; i < max_array_size - 1; ++i){
