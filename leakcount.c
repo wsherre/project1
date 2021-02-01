@@ -16,7 +16,6 @@ int main(int argc, char **argv){
         fprintf(in, "0 0");
         fclose(in);
         
-        char c = *argv[1];
         pid_t pid;
         if((pid = fork()) == 0){
             argv = argv+1;
@@ -28,9 +27,9 @@ int main(int argc, char **argv){
             size_t leak = 0;
             in = fopen("in.txt", "r");
             do{
-                fscanf(in, "%d\n", &leak);
+                fscanf(in, "%zu\n", &leak);
                 if(leak != -1){
-                    fprintf(stderr, "LEAK\t%d\n", leak);
+                    fprintf(stderr, "LEAK\t%zu\n", leak);
                 }
             }while(leak != -1);
             fscanf(in, "%d %d", &total, &total_bytes);
