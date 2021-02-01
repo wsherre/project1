@@ -72,7 +72,7 @@ int main(int argc, char** argv){
                 //exited
                 if (WIFEXITED(status)) {
                     //the child exited...let's exit too
-                    exit(1);
+                    break;
                 }
                 
                 //wait until the process is stopped or bit 7 is set in
@@ -92,7 +92,7 @@ int main(int argc, char** argv){
             ptrace(PTRACE_CONT, child, NULL, NULL);
             //waitpid(child, NULL, 0);
 
-        }while(1);
+        }while(!WIFEXITED(status));
     }
     print_array(array, argv);
     return 0;
