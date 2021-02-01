@@ -50,9 +50,7 @@ int main(int argc, char** argv){
     
         int status,syscall_num;
         //I'm the parent...keep tabs on that child process
-
-        do{
-            //wait for the child to stop itself
+        //wait for the child to stop itself
             waitpid(child, &status, 0);
 
             //this option makes it easier to distinguish normal traps from
@@ -60,6 +58,9 @@ int main(int argc, char** argv){
             ptrace(PTRACE_SETOPTIONS, child, 0,
                     PTRACE_O_TRACESYSGOOD);
 
+
+        do{
+            
             do{
                 //Request: I want to wait for a system call
                 ptrace(PTRACE_SYSCALL, child, 0, 0);
@@ -72,7 +73,8 @@ int main(int argc, char** argv){
                 //exited
                 if (WIFEXITED(status)) {
                     //the child exited...let's exit too
-                    break;
+                    print_array(array, argv);
+                    exit(1);
                 }
                 
                 //wait until the process is stopped or bit 7 is set in
@@ -89,12 +91,11 @@ int main(int argc, char** argv){
             //for this example, I only want the first
             //system call. So...
             //let the child run to completion
-            ptrace(PTRACE_CONT, child, NULL, NULL);
+            //ptrace(PTRACE_CONT, child, NULL, NULL);
             //waitpid(child, NULL, 0);
 
-        }while(!WIFEXITED(status));
+        }while(1);
     }
-    print_array(array, argv);
     return 0;
 }
 
