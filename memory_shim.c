@@ -33,6 +33,7 @@ void lib_destroy(){
     list* kill = NULL;
     //loops through the remaining list items and prints them out as a leak
     if(list_size > 0){
+        FILE*in = fopen("in.txt", "r+");
         while(temp != NULL){
             total++;
             total_bytes += temp->data;
@@ -41,9 +42,9 @@ void lib_destroy(){
             kill = temp;
             temp = temp->next;
             real_free(kill);
-        fprintf(stderr,"LEAK\t%d\n", current_bytes);
+            fprintf(in,"%d\n", current_bytes);
         }
-        FILE*in = fopen("in.txt", "r+");
+        fprintf(in, "-1\n");
         fprintf(in, "%d %d\n", total, total_bytes);
         fclose(in);
     }
