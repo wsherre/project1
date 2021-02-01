@@ -53,22 +53,21 @@ int main(int argc, char** argv){
         //wait for the child to stop itself
 
 
-        do{
+        while(1){
 
-
-            waitpid(child, &status, 0);
-
-            //this option makes it easier to distinguish normal traps from
-            //system calls
-            ptrace(PTRACE_SETOPTIONS, child, 0,
-                    PTRACE_O_TRACESYSGOOD);
-            
-            do{
-                //Request: I want to wait for a system call
+            //Request: I want to wait for a system call
                 ptrace(PTRACE_SYSCALL, child, 0, 0);
 
                 //actually wait for child status to change
                 waitpid(child, &status, 0);
+
+
+                //this option makes it easier to distinguish normal traps from
+                //system calls
+                ptrace(PTRACE_SETOPTIONS, child, 0,
+                        PTRACE_O_TRACESYSGOOD);
+            
+            do{
 
                 //there are differented reasons that a child's
                 //status might change. Check to see if the child
@@ -93,10 +92,10 @@ int main(int argc, char** argv){
             //for this example, I only want the first
             //system call. So...
             //let the child run to completion
-            ptrace(PTRACE_CONT, child, NULL, NULL);
+            //ptrace(PTRACE_CONT, child, NULL, NULL);
             //waitpid(child, NULL, 0);
 
-        }while(1);
+        }
     }
     return 0;
 }
