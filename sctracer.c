@@ -51,7 +51,7 @@ int main(int argc, char** argv){
         int status,syscall_num;
         //I'm the parent...keep tabs on that child process
 
-        while(!(WIFSTOPPED(status)){
+        do{
             //wait for the child to stop itself
             waitpid(child, &status, 0);
 
@@ -90,8 +90,9 @@ int main(int argc, char** argv){
             //system call. So...
             //let the child run to completion
             //ptrace(PTRACE_CONT, child, NULL, NULL);
-            waitpid(child, NULL, 0);
-        }
+            //waitpid(child, NULL, 0);
+
+        }while(!(WIFSTOPPED(status));
     }
     print_array(array, argv);
     return 0;
