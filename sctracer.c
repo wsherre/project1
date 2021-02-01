@@ -48,21 +48,46 @@ int main(int argc, char** argv){
     
     }else{    
     
-        int status,syscall_num;      
-        waitpid(child, &status, 0);        
-        ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD);
-        
-        
-        while(!WIFEXITED(status)){
-            ptrace(PTRACE_SYSCALL, child, 0, 0);    
-            //wait for status to change     
+        int status,syscall_num;
+        //I'm the parent...keep tabs on that child process
+
+        //wait for the child to stop itself
+        waitpid(child, &status, 0);
+
+        //this option makes it easier to distinguish normal traps from
+        //system calls
+        ptrace(PTRACE_SETOPTIONS, child, 0,
+                PTRACE_O_TRACESYSGOOD);
+
+        do{
+            //Request: I want to wait for a system call
+            ptrace(PTRACE_SYSCALL, child, 0, 0);
+
+            //actually wait for child status to change
             waitpid(child, &status, 0);
-            syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
+
+            //there are differented reasons that a child's
+            //status might change. Check to see if the child
+            //exited
+            if (WIFEXITED(status)) {
+                //the child exited...let's exit too
+                exit(1);
+            }
             
-            if(syscall_num == -1)
-                array[max_array_size - 1]++;
-            else
-                array[syscall_num]++;
+            //wait until the process is stopped or bit 7 is set in
+            //the status (see man page comment on
+            //PTRACE_O_TRACESYSGOOD)
+        } while (!(WIFSTOPPED(status) && WSTOPSIG(status) & 0x80));
+
+        //read out the saved value of the RAX register,
+        //which contains the system call number
+        //For 32-bit machines, you would use EAX.
+        syscall_num = ptrace(PTRACE_PEEKUSER, child, sizeof(long)*ORIG_RAX, NULL);
+        array[syscall_num]++;
+        
+        //for this example, I only want the first
+        //system call. So...
+        //let the child run to completion
         }
     }
     print_array(array, argv);
