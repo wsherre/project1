@@ -13,7 +13,7 @@ int main(int argc, char **argv){
         char *envp[] = {"LD_PRELOAD=./memory_shim.so", NULL};
         FILE*in;
         in = fopen("in.txt", "w+");
-        //fprintf(in, "0 0");
+        fprintf(in, "-1\n");
         fclose(in);
         
         pid_t pid;
