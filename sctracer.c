@@ -69,6 +69,10 @@ int main(int argc, char** argv){
             
             do{
 
+                ptrace(PTRACE_SYSCALL, child, 0, 0);
+
+                //actually wait for child status to change
+                waitpid(child, &status, 0);
                 //there are differented reasons that a child's
                 //status might change. Check to see if the child
                 //exited
