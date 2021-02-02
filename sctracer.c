@@ -106,7 +106,7 @@ void print_array(int array[], char** argv){
     //just print the array out to the output file
     FILE *output;
     output = fopen(argv[2], "w+");
-    for(int i = 0; i < max_array_size - 1; ++i){
+    for(int i = 0; i < max_array_size; ++i){
         if(array[i] > 0)
             fprintf(output, "%d\t%d\n", i, array[i]);
     }
