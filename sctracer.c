@@ -59,6 +59,7 @@ int main(int argc, char** argv){
     }else{    
         int status,syscall_num;
 
+        //we're gonna loop until we get out of this mess
         while(1){
 
                 //request syscall
